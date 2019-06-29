@@ -1,6 +1,6 @@
 require 'homebus_app_options'
 
-class CamerasHomeBusAppOptions < HomeBusAppOptions
+class CameraHomeBusAppOptions < HomeBusAppOptions
   def app_options(op)
     camera_still_help = 'URL that returns still image from camera'
 
@@ -17,6 +17,6 @@ class CamerasHomeBusAppOptions < HomeBusAppOptions
   end
 
   def name
-    'homebus-ctrlh-cameras'
+    'homebus-ctrlh-camera'
   end
 end
