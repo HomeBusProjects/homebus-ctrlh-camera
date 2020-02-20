@@ -9,16 +9,20 @@ require 'base64'
 require 'timeout'
 
 class CameraHomeBusApp < HomeBusApp
+  def DDC
+    'org.homebus.image'
+  end
+
   def initialize(options)
     @options = options
 
     super
   end
 
-
   def setup!
     Dotenv.load('.env')
     @url = ENV['CAMERA_URL']
+    @publish_delay = ENV['PUBLISH_DELAY'] || 60
   end
 
   def get_image
@@ -49,17 +53,17 @@ class CameraHomeBusApp < HomeBusApp
       obj = {
         id: @uuid,
         timestamp: Time.now.to_i,
-        image: image
       }
 
-      @mqtt.publish '/cameras',
-                    JSON.generate(obj),
-                    true
+      obj[DDC] = image
+
+      publish! DDC,
+               obj
     else
       puts "no image"
     end
 
-    sleep 60
+    sleep @publish_delay
  end
 
   def manufacturer
@@ -67,7 +71,7 @@ class CameraHomeBusApp < HomeBusApp
   end
 
   def model
-    'D'
+    ''
   end
 
   def friendly_name
@@ -79,7 +83,7 @@ class CameraHomeBusApp < HomeBusApp
   end
 
   def serial_number
-    ''
+    @url
   end
 
   def pin
@@ -90,11 +94,11 @@ class CameraHomeBusApp < HomeBusApp
     [
       { friendly_name: '^H Cameras',
         friendly_location: 'PDX Hackerspace',
-        update_frequency: 60,
+        update_frequency: @publish_delay,
         index: 0,
         accuracy: 0,
         precision: 0,
-        wo_topics: [ '/cameras' ],
+        wo_topics: [ DDC ],
         ro_topics: [],
         rw_topics: []
       }
