@@ -10,7 +10,7 @@ require 'timeout'
 
 class CameraHomeBusApp < HomeBusApp
   def DDC
-    'org.homebus.image'
+    'org.homebus.experimental.image'
   end
 
   def initialize(options)
@@ -25,7 +25,7 @@ class CameraHomeBusApp < HomeBusApp
     @publish_delay = ENV['PUBLISH_DELAY'] || 60
   end
 
-  def get_image
+  def _get_image
     begin
       response = Timeout::timeout(30) do
         uri = URI(@url)
@@ -47,12 +47,12 @@ class CameraHomeBusApp < HomeBusApp
   end
 
   def work!
-    image = get_image
+    image = _get_image
 
     if image
       obj = {
         id: @uuid,
-        timestamp: Time.now.to_i,
+        timestamp: Time.now.to_i
       }
 
       obj[DDC] = image
