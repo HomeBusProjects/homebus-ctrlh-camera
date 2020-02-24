@@ -57,8 +57,7 @@ class CameraHomeBusApp < HomeBusApp
 
       obj[DDC] = image
 
-      publish! DDC,
-               obj
+      publish! DDC, obj
     else
       puts "no image"
     end
