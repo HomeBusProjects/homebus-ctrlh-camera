@@ -9,9 +9,7 @@ require 'base64'
 require 'timeout'
 
 class CameraHomeBusApp < HomeBusApp
-  def DDC
-    'org.homebus.experimental.image'
-  end
+  DDC = 'org.homebus.experimental.image'
 
   def initialize(options)
     @options = options
